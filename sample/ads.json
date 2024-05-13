@@ -1,0 +1,36 @@
+{
+    "connectionId": "string",
+    "user": "string",
+    "payload": {
+      "templateType": "Ads",
+      "title": "Flash Sales Akhir Tahun",
+      "message": "Hallo sobat sekarang lagi ada promo akhir tahun nih, yuk cek tkp!",
+      "messageTextAlign": "Center",
+      "imageRedirectUrl": "https://www.youtube.com/watch?v=Vrq1JJT_kCc",
+      "imageUrl": "https://static.vecteezy.com/system/resources/previews/022/998/753/non_2x/flash-sale-text-with-discount-offer-on-red-background-for-advertising-poster-design-vector.jpg",
+      "iconUrl": "https://dashboard.techgadgetforus.com/assets/icon-telkomsel-terbaru-54864533.png",
+      "destination": {
+        "path": [
+          "/"
+        ],
+        "displayPosition": "TopLeft"
+      },
+      "isHTMLMessage": false,
+      "actions": [
+        {
+          "name": "Oke Mau!",
+          "type": "Link",
+          "color": "Primary",
+          "description": "Redirect Button",
+          "link": "https://www.youtube.com/watch?v=Vrq1JJT_kCc"
+        },
+        {
+          "name": "Nanti saja",
+          "type": "Text",
+          "color": "Default",
+          "description": "Cancel Button",
+          "link": "#"
+        }
+      ]
+    }
+  }

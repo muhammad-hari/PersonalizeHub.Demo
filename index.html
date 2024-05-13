@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SignalR Client</title>
+    <link href="/assets/vendors/hystmodal/hystmodal.css" rel="stylesheet">
+    <link href="/assets/vendors/minstyle/dist/css/minstyle.io.css" rel="stylesheet">
+    <link href="/assets/css/main.css" rel="stylesheet">
+
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+
+    <script src="/assets/libs/signalr/signalr.min.js"></script>
+    <script src="/assets/vendors/hystmodal/hystmodal.js"></script>
+   
+    
+</head>
+<body>
+    <p>Hello World</p>
+
+    <div class="hystmodal" id="myModal" aria-hidden="true">
+        <div class="hystmodal__wrap">
+            <div class="hystmodal__window" role="dialog" aria-modal="true">
+                <button data-hystclose class="hystmodal__close">Close</button>
+                <p id="txtMessage"></p>
+            </div>
+        </div>
+    </div>
+
+     <!-- Start Sample Template -->
+     <div class="hystmodal" id="pz_simple_template" aria-hidden="true">
+        <div class="hystmodal__wrap">
+            <div class="pz_hub_window hystmodal__window" role="dialog" aria-modal="true">
+                <div class="ms-card light">
+                    <div class="ms-card-title light-header">
+                        <div class="card-header">
+                            <div class="ms-avatar ms-small icon">
+                                <img class="pz_hub_icon ms-avatar-img" src="#" alt="..."/>
+                            </div>
+                            <h2 class="pz_hub_title"></h2>
+                            <span data-hystclose class="btn-close"> &times; </span>
+                        </div>
+                    </div>
+                    <div class="ms-card-content pz_hub_content"></div>
+                    <div class="ms-card-btn pz_hub_actions"> </div>
+                </div>     
+            </div>
+        </div>
+    </div>
+    <!-- End Sample Template -->
+
+
+
+    <!-- Start Ads Template -->
+    <div class="hystmodal" id="pz_ads_template" aria-hidden="true">
+        <div class="hystmodal__wrap">
+            <div class="pz_hub_window hystmodal__window" role="dialog" aria-modal="true">
+                <div class="ms-card light" style="margin: 0 !important;">
+                    <div class="ms-card-title light-header">
+                        <div class="card-header">
+                            <div class="ms-avatar ms-small icon">
+                                <img class="pz_hub_icon ms-avatar-img" src="#" alt="..."/>
+                            </div>
+                            <h2 class="pz_hub_title"></h2>
+                            <span data-hystclose class="btn-close"> &times; </span>
+                        </div>
+                    </div>
+                    <div class="ms-card-pic">
+                        <a class="pz_hub_img_link" style="color: transparent !important;" href="#" target="_blank">
+                            <img class="pz_hub_img"
+                                src="#"
+                                alt="image"
+                                height="255px"
+                                style="border-radius: 0 !important;"
+                            />
+                        </a>
+                    </div>
+                    <div class="ms-card-content pz_hub_content"></div>
+                    <div class="ms-card-btn pz_hub_actions"> </div>
+                </div>     
+            </div>
+        </div>
+    </div>
+    <!-- End Ads Template -->
+
+    <script>
+        const connection = new signalR.HubConnectionBuilder()
+            .withUrl('https://localhost:7030/webpush', {
+                skipNegotiation: true, // Skip negotiation process
+                transport: signalR.HttpTransportType.WebSockets, // Specify transport type
+                withCredentials: true // Allow credentials to be sent
+            })
+            .configureLogging(signalR.LogLevel.Information)
+            .build();
+
+        connection.start().then(function () {
+            console.log("Connection established.");
+        }).catch(function (err) {
+            return console.error(err.toString());
+        });
+
+        connection.on("ReceiveMessage", function (user, message) {
+            var payload = toJSON(message);
+            console.log(payload);
+
+            var isValid = true; 
+
+            if(payload.templateType == "Simple"){
+                isValid = validation.onSimple(payload, "pz_simple_template");
+            }
+
+            if(payload.templateType == "Ads"){
+                isValid = validation.onAds(payload, "pz_ads_template");
+            }
+
+            if(isValid){
+                var audio = new Audio("/assets/audio/sound1.mp3");
+                audio.play();
+            }
+       
+        });
+
+        function toJSON(jsonString) {
+            try {
+                var jsonObject = JSON.parse(jsonString);
+                return jsonObject;
+            } catch (error) {
+                console.error("Error parsing JSON string:", error);
+                return null;
+            }
+        }
+
+        function toTextAlignConversion(align){
+            switch(align){
+                case "Center":
+                    return "ms-text-center"
+                case "Right":
+                    return "ms-text-right"
+                default:
+                    return "ms-text-left";
+                break;
+            }
+
+        }
+
+        function toColorConversion(color){
+            switch(color){
+                case "Primary":
+                    return "ms-primary"
+                case "Secondary":
+                    return "ms-secondary"
+                default:
+                    return "";
+                break;
+            }
+        }
+
+        function showModalAnimation(position, elementId) {
+            var modal = document.getElementById(elementId);
+            if (modal) {
+                // Get the element with the class "pz_hub_window" inside the modal
+                var pzHubWrap = modal.querySelector(".hystmodal__wrap");
+                var pzHubWindow =  modal.querySelector(".hystmodal__window");
+
+                if (pzHubWrap && pzHubWindow) {
+                    pzHubWrap.classList.remove('hystmodal__animation', 'bottom-left', 'bottom-right', 'top-left', 'top-right', 'bottom-center', 'top-center');
+                    pzHubWindow.classList.remove('hystmodal_window_center');
+                    switch (position) {
+                        case 'BottomLeft':
+                            pzHubWrap.classList.add('hystmodal__animation','bottom-left');
+                            break;
+                        case 'BottomRight':
+                            pzHubWrap.classList.add('hystmodal__animation','bottom-right');
+                            break;
+                        case 'TopLeft':
+                            pzHubWrap.classList.add('hystmodal__animation','top-left');
+                            break;
+                        case 'TopRight':
+                            pzHubWrap.classList.add('hystmodal__animation','top-right');
+                            break;
+                        case 'BottomCenter':
+                            pzHubWrap.classList.add('hystmodal_window_center', 'bottom-center');
+                            break;
+                        case 'TopCenter':
+                            pzHubWrap.classList.add('hystmodal_window_center','top-center');
+                            break;
+                        default:
+                            console.error('Invalid position');
+                            return;
+                    }
+                
+                    // Show the modal
+                    var modal = new HystModal({
+                        linkAttributeName: 'data-hystmodal',
+                        catchFocus: true,
+                        closeOnOverlay: false,
+                        waitTransitions: true,
+                        closeOnEsc: false,
+                        beforeOpen: function(modal){},
+                        afterClose: function(modal){}
+                    });
+                
+                    modal.open(`#${elementId}`);
+                }
+            } else {
+                console.error("Template not found");
+            }
+        }
+        
+
+        function checkNotFoundElement(elements) {
+            var isElementNotFound = false;
+            Object.keys(elements).forEach(key => {
+                if (elements[key].length === 0) {
+                    console.error(`Element with class "${key}" not found`);
+                    isElementNotFound = true;
+                }
+            });
+            return isElementNotFound;
+        }
+        
+
+        var validation = {
+            onSimple: (payload, elementId) => {
+                const elements = {
+                    icon: document.querySelectorAll(".pz_hub_icon"),
+                    title: document.querySelectorAll(".pz_hub_title"),
+                    content: document.querySelectorAll(".pz_hub_content"),
+                    actions: document.querySelectorAll(".pz_hub_actions")
+                };
+            
+                var isElementNotFound = checkNotFoundElement(elements);
+                if (isElementNotFound) {
+                    return false;
+                }
+            
+                if (!payload.title || !payload.iconUrl || payload.isHTMLMessage === undefined || !payload.message) {
+                    console.error("Some required attributes are not found");
+                    return false;
+                }
+            
+                elements.title.forEach(function (element) {
+                    element.textContent = payload.title;
+                });
+                elements.icon.forEach(function (element) {
+                    element.src = payload.iconUrl;
+                });
+                elements.content.forEach(function (element) {
+                    element.innerHTML = !payload.isHTMLMessage ? `<p>${payload.message}</p>` : payload.message;
+                    var aligns = [`${toTextAlignConversion("Left")}`, `${toTextAlignConversion("Right")}`, `${toTextAlignConversion("Center")}`];
+                    aligns.forEach(align => {
+                        if (element.classList.contains(align)) {
+                            element.classList.remove(align);
+                        }
+                    });
+
+                    element.classList.add(`${toTextAlignConversion(payload.messageTextAlign)}`);
+                });
+            
+                if (payload.actions.length > 0) {
+                    elements.actions.forEach(function (element) {
+                        element.innerHTML = "";
+            
+                        payload.actions.forEach(function (item) {
+                            var anchorElement = document.createElement("a");
+                            anchorElement.href = item.type == "Link" ? item.link : "#";
+                            anchorElement.textContent = item.name;
+                            anchorElement.className = "ms-btn ms-box-shadow " + toColorConversion(item.color);
+            
+                            if (item.type == "Text") {
+                                anchorElement.setAttribute("data-hystclose", "");
+                            }
+            
+                            element.appendChild(anchorElement);
+                        });
+                    });
+                }
+            
+                var currentPath = window.location.pathname;
+                if (payload.destination.path.includes(currentPath)) {
+                    showModalAnimation(payload.destination.displayPosition, elementId);
+                    return true;
+                } else {
+                    console.error('Destination path is not specified');
+                    return false;
+                }
+            },
+            onAds: (payload, elementId) => {
+                const elements = {
+                    icon: document.querySelectorAll(".pz_hub_icon"),
+                    title: document.querySelectorAll(".pz_hub_title"),
+                    imageLink: document.querySelectorAll(".pz_hub_img_link"),
+                    imageUrl: document.querySelectorAll(".pz_hub_img"),
+                    content: document.querySelectorAll(".pz_hub_content"),
+                    actions: document.querySelectorAll(".pz_hub_actions")
+                };
+            
+                var isElementNotFound = checkNotFoundElement(elements);
+                if (isElementNotFound) {
+                    return false;
+                }
+            
+                if (!payload.imageUrl || !payload.imageRedirectUrl || !payload.title ||
+                    !payload.iconUrl || payload.isHTMLMessage === undefined || !payload.message) {
+                    console.error("Some required attributes are not found");
+                    return false;
+                }
+            
+                elements.title.forEach(function (element) {
+                    element.textContent = payload.title;
+                });
+                elements.icon.forEach(function (element) {
+                    element.src = payload.iconUrl;
+                });
+                elements.imageUrl.forEach(function (element) {
+                    element.src = payload.imageUrl;
+                });
+                elements.imageLink.forEach(function (element) {
+                    element.href = payload.imageRedirectUrl;
+                });
+                elements.content.forEach(function (element) {
+                    element.innerHTML = !payload.isHTMLMessage ? `<p>${payload.message}</p>` : payload.message;
+                    var aligns = [`${toTextAlignConversion("Left")}`, `${toTextAlignConversion("Right")}`, `${toTextAlignConversion("Center")}`];
+                    aligns.forEach(align => {
+                        if (element.classList.contains(align)) {
+                            element.classList.remove(align);
+                        }
+                    });
+
+                    element.classList.add(`${toTextAlignConversion(payload.messageTextAlign)}`);
+                });
+            
+                if (payload.actions.length > 0) {
+                    elements.actions.forEach(function (element) {
+                        element.innerHTML = "";
+            
+                        payload.actions.forEach(function (item) {
+                            var anchorElement = document.createElement("a");
+                            anchorElement.href = item.type == "Link" ? item.link : "#";
+                            anchorElement.textContent = item.name;
+                            anchorElement.className = "ms-btn ms-box-shadow " + toColorConversion(item.color);
+            
+                            if (item.type == "Text") {
+                                anchorElement.setAttribute("data-hystclose", "");
+                            }
+            
+                            element.appendChild(anchorElement);
+                        });
+                    });
+                }
+            
+                var currentPath = window.location.pathname;
+                if (payload.destination.path.includes(currentPath)) {
+                    showModalAnimation(payload.destination.displayPosition, elementId);
+                    return true;
+                } else {
+                    console.error('Destination path is not specified');
+                    return false;
+                }
+            }
+
+        };
+        
+
+    </script>
+
+    <script>
+        if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+            navigator.mediaDevices.getUserMedia({ audio: true })
+            .then(function(stream) {
+                console.log("Izin akses audio telah diberikan.");
+            })
+            .catch(function(err) {
+                console.error("Gagal meminta izin akses audio:", err);
+            });
+        } else {
+            console.error("Browser Anda tidak mendukung API getUserMedia.");
+        }
+        
+        </script>
+</body>
+</html>

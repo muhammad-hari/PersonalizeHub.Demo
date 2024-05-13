@@ -1,0 +1,36 @@
+{
+    "connectionId": "string",
+    "user": "string",
+    "payload": {
+      "templateType": "Simple",
+      "title": "Flash Sales Akhir Tahun",
+      "message": "<p>Hallo sobat sekarang lagi ada promo akhir tahun nih, yuk cek tkp!</p>",
+      "messageTextAlign": "Center",
+      "imageRedirectUrl": "",
+      "imageUrl": "",
+      "iconUrl": "https://dashboard.techgadgetforus.com/assets/icon-telkomsel-terbaru-54864533.png",
+      "destination": {
+        "path": [
+          "string"
+        ],
+        "displayPosition": "Center"
+      },
+      "isHTMLMessage": true,
+      "actions": [
+        {
+          "name": "Oke Mau!",
+          "type": "Link",
+          "color": "Primary",
+          "description": "Redirect Button",
+          "link": "https://www.youtube.com/watch?v=Vrq1JJT_kCc"
+        },
+        {
+          "name": "Nanti saja",
+          "type": "Link",
+          "color": "Default",
+          "description": "Redirect Button",
+          "link": "https://www.youtube.com/watch?v=Vrq1JJT_kCc"
+        }
+      ]
+    }
+  }

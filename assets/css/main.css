@@ -1,0 +1,56 @@
+.ms-card{
+    border-radius: 3px;
+}
+
+.ms-card .light{
+   background-color: #FFF;    
+}
+
+.ms-card .ms-card-title .light-header{
+    background-color: #F2F2F2 !important;
+}
+
+.ms-card .ms-card-title {
+    padding: 5px !important;
+    background-color: #333;
+}
+
+.ms-card .ms-card-title .card-header{
+    display: flex;
+    align-items: center;
+    margin: 0 5px;
+    justify-content: space-between;
+}
+
+.ms-card .ms-card-title .card-header h2{
+    font-size: 18px !important;
+    color: #F2F2F2 !important;
+}
+
+.ms-card .ms-card-title .card-header .icon{
+    background-color: #F2F2F2;
+    width: 25px;
+    height: 25px;
+}
+
+.ms-card .ms-card-title .card-header .btn-close{
+    font-size: 24px !important;
+    color: #FFF;
+    font-weight: 500;
+    font-stretch:wider;
+    margin: 0 5px;
+    cursor: pointer;
+    font-style: normal;
+}
+
+.ms-card .ms-card-pic {
+    margin: 0 !important;
+}
+
+.ms-card .ms-card-content {
+    padding: 10px 15px;
+}
+
+.ms-card .ms-card-btn{
+    padding: 10px 15px 20px 15px;
+}
