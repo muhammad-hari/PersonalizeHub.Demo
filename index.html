@@ -85,7 +85,7 @@
 
     <script>
         const connection = new signalR.HubConnectionBuilder()
-            .withUrl('https://localhost:7030/webpush', {
+            .withUrl('http://localhost:5125/webpush', {
                 skipNegotiation: true, // Skip negotiation process
                 transport: signalR.HttpTransportType.WebSockets, // Specify transport type
                 withCredentials: true // Allow credentials to be sent

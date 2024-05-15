@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SignalR Client</title>
+    <link href="/assets/vendors/minstyle/dist/css/minstyle.io.css" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+        rel="stylesheet">
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <!-- <script src="/assets/libs/jquery/jquery-3.7.1.slim.min.js" type="text/javascript"></script> -->
+
+</head>
+
+<body>
+    <div class="container" style="margin: 50px auto;">
+        <div class="row">
+            <form method="post">
+                <div class="col-lg-12">
+                    <div class="row">
+                        <div class="col-sm">
+                            <div class="ms-form-group">
+                                <label for="sTemplate">Select Template</label>
+                                <select id="sTemplate">
+                                    <option value="Simple">Simple</option>
+                                    <option selected value="Ads">Ads</option>
+                                </select>
+                            </div>
+                            <div class="ms-form-group">
+                                <label for="title">Title</label>
+                                <input type="text" value="MysteryBox 2024" placeholder="title" id="title" />
+                            </div>
+                            <div class="ms-form-group">
+                                <label for="textarea">Message</label>
+                                <textarea id="message" placeholder="message" rows="5"></textarea>
+                            </div>
+                            <div class="ms-form-group-inline">
+                                <input type="checkbox" id="isHTMLMessage" />
+                                <label for="Checkbox">Is HTML Mode</label>
+                            </div>
+                            <div class="ms-form-group">
+                                <label for="sTextAlign">Select Text Align</label>
+                                <select id="sTextAlign">
+                                    <option selected value="Left">Left</option>
+                                    <option value="Center">Center</option>
+                                    <option value="Right">Right</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-sm">
+                            <div class="ms-form-group">
+                                <label for="bannerUrl">Banner URL</label>
+                                <input type="text" value="https://static.vecteezy.com/system/resources/previews/022/998/753/non_2x/flash-sale-text-with-discount-offer-on-red-background-for-advertising-poster-design-vector.jpg" placeholder="Banner" id="bannerUrl" />
+                            </div>
+                            <div class="ms-form-group">
+                                <label for="bannerLink">Banner Redirect Link</label>
+                                <input type="text" value="https://learn.microsoft.com/en-us/dotnet/api/system.collections.generic.ireadonlylist-1?view=net-8.0" placeholder="Banner Redirect Link" id="bannerLink" />
+                            </div>
+                            <div class="ms-form-group">
+                                <label for="iconUrl">Icon</label>
+                                <input type="text" value="https://dashboard.techgadgetforus.com/assets/icon-telkomsel-terbaru-54864533.png" placeholder="Icon" id="iconUrl" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-12">
+                    <div class="row">
+                        <div class="col-sm">
+                            <div class="ms-form-group">
+                                <label for="path">Destination Path</label>
+                                <input type="text" value="/index.html" placeholder="destination path" id="path" />
+                            </div>
+                            <div class="ms-form-group">
+                                <label for="sDisplayPosition">Display Position</label>
+                                <select id="sDisplayPosition">
+                                    <option selected value="TopRight">Top Right</option>
+                                    <option value="TopLeft">Top Left</option>
+                                    <option value="TopCenter">Top Center</option>
+                                    <option value="BottomCenter">Bottom Center</option>
+                                    <option value="BottomRight">Bottom Right</option>
+                                    <option value="BottomLeft">Bottom Left</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-sm">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-12">
+                    <div class="ms-form-group" style="margin-top: 2rem;">
+                        <label for="path">Button Actions</label>
+                        <button id="addInput" type="button" class="ms-btn ms-primary">Add Action</button>
+                    </div>
+                    <div id="sectionActions">
+
+                    </div>
+                    <div><button type="button" id="btnSubmit" style="margin-top: 20px;" class="ms-btn ms-primary ms-fullwidth">Send Now</button></div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        $(document).ready(function () {
+            var inputCounter = 1;
+            // Function to add a new input field
+            $('#addInput').on('click', function () {
+                inputCounter++;
+                var newInput = `
+                    <div class="ms-form-group" id="action_group_${inputCounter}">
+                        <div class="ms-form-group-inline">
+                            <label for="action_name_${inputCounter}">Name</label>
+                            <input type="text" id="action_name_${inputCounter}"/>
+
+                            <label for="action_type_${inputCounter}">Type</label>
+                            <select id="action_type_${inputCounter}">
+                                <option value="Text">Text</option>
+                                <option value="Link">Link</option>
+                            </select>
+
+                            <label for="action_color_${inputCounter}">Color</label>
+                            <select id="action_color_${inputCounter}">
+                                <option value="Primary">Primary</option>
+                                <option value="Secondary">Secondary</option>
+                                <option value="Default">Default</option>
+                            </select>
+
+                            <label for="action_description_${inputCounter}">Description</label>
+                            <input type="text" id="action_description_${inputCounter}"/>
+                       
+                            <label for="action_link_${inputCounter}">Link</label>
+                            <input type="text" id="action_link_${inputCounter}"/>
+                       
+                            <button type="button" style="margin-left:10px" class="ms-btn ms-primary removeInput" data-id="${inputCounter}">&times;</button>
+                        </div>
+                    </div>
+                `;
+                $('#sectionActions').append(newInput);
+            });
+
+            // Function to remove an input field
+            $('#sectionActions').on('click', '.removeInput', function () {
+                var inputId = $(this).data('id');
+                $('#action_group_' + inputId).remove();
+            });
+        });
+    </script>
+
+    <script>
+        $(document).ready(function() {
+            $("#btnSubmit").click(function(e) {
+                e.preventDefault();
+
+                var values = [];
+                $('#sectionActions .ms-form-group').each(function() {
+                    var group = $(this);
+                    var actionValues = {
+                        name: group.find('input[id^="action_name_"]').val(),
+                        type: group.find('select[id^="action_type_"]').val(),
+                        color: group.find('select[id^="action_color_"]').val(),
+                        description: group.find('input[id^="action_description_"]').val(),
+                        link: group.find('input[id^="action_link_"]').val()
+                    };
+                    values.push(actionValues);
+                });
+                
+                var actions = values.map(function(value) {
+                    return {
+                        name: value.name,
+                        type: value.type,
+                        color: value.color,
+                        description: value.description,
+                        link: value.link
+                    }
+                });
+
+                var content = {
+                    templateType: $("#sTemplate").val(),
+                    title: $("#title").val(),
+                    message: $("#message").val(),
+                    messageTextAlign: $("#sTextAlign").val(),
+                    imageUrl: $("#bannerUrl").val(),
+                    imageRedirectUrl: $("#bannerLink").val(),
+                    iconUrl: $("#iconUrl").val(),
+                    destination: {
+                        path: [
+                            $("#path").val()
+                        ],
+                        displayPosition: $("#sDisplayPosition").val()
+                    },
+                    isHTMLMessage: false,
+                    actions: actions,
+                };
+
+                console.log("sample", {
+                    connectionId: "1276162gd71ghh17621",
+                    user: "demo",
+                    payload: content
+                })
+
+                $.ajax({
+                    url: 'http://localhost:5125/push-notification',
+                    type: 'POST',
+                    data: JSON.stringify({
+                        connectionId: "1276162gd71ghh17621",
+                        user: "demo",
+                        payload: content
+                    }),
+                    contentType: 'application/json; charset=utf-8',
+                    dataType: 'json',
+                    success: function(response) {
+                        //alert("success!");
+                    },
+                    error: function(jqXHR, textStatus, errorThrown) {
+                      //  alert("failed!");
+                    }
+                });
+            });
+        });
+    </script>
+
+</body>
+
+</html>
